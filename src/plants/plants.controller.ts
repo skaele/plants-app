@@ -2,33 +2,55 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { PlantsService } from './plants.service'
 import { CreatePlantDto } from './dto/create-plant.dto'
 import { UpdatePlantDto } from './dto/update-plant.dto'
+import { UpdateEmployerDto } from './dto/update-employer.dto'
+import { CreateEmployerDto } from './dto/create-employer.dto'
 
-@Controller('plants')
+@Controller('plant')
 export class PlantsController {
     constructor(private readonly plantsService: PlantsService) {}
 
     @Post()
-    create(@Body() createPlantDto: CreatePlantDto) {
-        return this.plantsService.create(createPlantDto)
+    async createPlant(@Body() createPlantDto: CreatePlantDto) {
+        return await this.plantsService.createPlant(createPlantDto)
+    }
+
+    @Post('employer')
+    async createEmployer(@Body() createEmployerDto: CreateEmployerDto) {
+        return await this.plantsService.createEmployer(createEmployerDto)
+    }
+
+    @Post('custom')
+    async executeCustom(@Body() { data }: { data: string }) {
+        return await this.plantsService.executeCustomCommand(data)
     }
 
     @Get()
-    findAll() {
+    findAllPlants() {
         return this.plantsService.findAllPlants()
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.plantsService.findOne(id)
+    @Get('sort')
+    findAllSorts() {
+        return this.plantsService.findAllSorts()
     }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() updatePlantDto: UpdatePlantDto) {
-        return this.plantsService.update(id, updatePlantDto)
+    @Get('employer')
+    findAllEmployer() {
+        return this.plantsService.findAllEmployers()
+    }
+
+    @Patch()
+    async updatePlant(@Body() updatePlantDto: UpdatePlantDto) {
+        return await this.plantsService.updatePlants(updatePlantDto)
+    }
+
+    @Patch('employer')
+    async updateEmployer(@Body() updateEmployerDto: UpdateEmployerDto) {
+        return await this.plantsService.updateEmployer(updateEmployerDto)
     }
 
     @Delete(':id')
     remove(@Param('id') id: string) {
-        return this.plantsService.remove(id)
+        return this.plantsService.removePlant(id)
     }
 }
